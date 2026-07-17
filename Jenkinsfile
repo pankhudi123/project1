@@ -5,27 +5,32 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo 'Source downloaded'
+                git branch: 'main',
+                    url: 'https://github.com/pankhudi123/project1.git'
             }
         }
 
-        stage('Verify') {
+        stage('Verify Workspace') {
             steps {
-                sh 'ls -la'
+                sh '''
+                pwd
+                ls -la
+                '''
             }
         }
 
         stage('Deploy') {
             steps {
                 sh '''
-                rsync -av --delete ./ root@192.168.15.136:/var/lib/docker/volumes/apachevol/_data/
+                docker cp . apache:/usr/local/apache2/htdocs/
                 '''
             }
         }
+
         stage('Verify Deployment') {
             steps {
                 sh '''
-                curl -f http://192.168.15.136:8080
+                docker exec apache ls -l /usr/local/apache2/htdocs/
                 '''
             }
         }
