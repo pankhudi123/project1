@@ -22,13 +22,9 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                whoami
-                id
-                pwd
-                ls -l /var/run/docker.sock
-                docker --version
-                docker ps
-                docker cp . apache:/usr/local/apache2/htdocs/
+                rm -rf /usr/local/apache2/htdocs/*
+                cp -r ./* /usr/local/apache2/htdocs/
+                ls -l /usr/local/apache2/htdocs/
                 '''
             }
         }
@@ -36,7 +32,7 @@ pipeline {
         stage('Verify Deployment') {
             steps {
                 sh '''
-                docker exec apache ls -l /usr/local/apache2/htdocs/
+                ls -l /usr/local/apache2/htdocs/
                 '''
             }
         }
