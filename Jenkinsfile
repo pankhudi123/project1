@@ -22,6 +22,12 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
+                whoami
+                id
+                pwd
+                ls -l /var/run/docker.sock
+                docker --version
+                docker ps
                 docker cp . apache:/usr/local/apache2/htdocs/
                 '''
             }
